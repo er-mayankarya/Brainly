@@ -61,7 +61,20 @@ app.post("/api/v1/signin", async (req, res) => {
 });
 
 //Create Content Endpoint
-app.post("/api/v1/content", async (req, res) => {});
+app.post("/api/v1/content", async (req, res) => {
+  const { link, type, title } = req.body;
+  await ContenTModel.create({
+    link,
+    type,
+    title,
+    //@ts-ignore
+    userId: req.userId,
+    tags: [],
+  });
+  res.json({
+    message: "Content Added",
+  });
+});
 
 //Get Existing Content Endpoint
 app.get("/api/v1/content", (req, res) => {});
