@@ -1,5 +1,5 @@
 import mongoose, { Schema, Types } from "mongoose";
- 
+
 // User Schema & Model
 const userSchema = new mongoose.Schema({
   username: { type: String, required: true, unique: true },
@@ -7,7 +7,6 @@ const userSchema = new mongoose.Schema({
 });
 
 export const UserModel = mongoose.model("Users", userSchema);
-
 
 // Content Schema & Model
 const contentTypes = ["image", "video", "article", "audio"]; // Extend as needed in future
@@ -22,14 +21,12 @@ const contentSchema = new Schema({
 
 export const ContenTModel = mongoose.model("Contents", contentSchema);
 
-
 // Tag Schema & Model
 const tagSchema = new mongoose.Schema({
   title: { type: String, required: true, unique: true },
 });
 
 export const TagModel = mongoose.model("Tags", tagSchema);
-
 
 //Link Schema & Model
 const linkSchema = new mongoose.Schema({
