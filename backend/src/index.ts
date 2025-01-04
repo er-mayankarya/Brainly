@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken";
 import "dotenv/config";
 import { ContenTModel, UserModel } from "./db";
 import { JWT_SECRET } from "./config";
+import { userMiddleware } from "./middlewares";
 
 const app = express();
 app.use(express.json());
@@ -61,7 +62,7 @@ app.post("/api/v1/signin", async (req, res) => {
 });
 
 //Create Content Endpoint
-app.post("/api/v1/content", async (req, res) => {
+app.post("/api/v1/content", userMiddleware , async (req, res) => {
   const { link, type, title } = req.body;
   await ContenTModel.create({
     link,
@@ -77,7 +78,17 @@ app.post("/api/v1/content", async (req, res) => {
 });
 
 //Get Existing Content Endpoint
-app.get("/api/v1/content", (req, res) => {});
+app.get("/api/v1/content", userMiddleware , async (req, res) => {
+  //@ts-ignore
+  const userId = req.userId;
+  const content = ContenTModel.find({
+    userId : userId
+  })
+
+  res.send({
+    content
+  })
+});
 
 //Delete Existing content Endpoint
 app.delete("/api/v1/content", (req, res) => {});
