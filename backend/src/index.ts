@@ -83,7 +83,7 @@ app.get("/api/v1/content", userMiddleware , async (req, res) => {
   const userId = req.userId;
   const content = await ContenTModel.find({
     userId : userId
-  })
+  }).populate("userId" , "username")
 
   res.send({
     content
@@ -91,7 +91,18 @@ app.get("/api/v1/content", userMiddleware , async (req, res) => {
 });
 
 //Delete Existing content Endpoint
-app.delete("/api/v1/content", (req, res) => {});
+app.delete("/api/v1/content", userMiddleware , async (req, res) => {
+  const contentId = req.body.contentId;
+  await ContenTModel.deleteMany({
+    contentId ,
+    //@ts-ignore
+    userId : req.userId
+  })
+
+  res.json({
+    message : "Content Deleted"
+  })
+});
 
 // Share Endpint
 app.post("/api/v1/brain/share", (req, res) => {});
