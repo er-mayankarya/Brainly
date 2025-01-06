@@ -2,9 +2,10 @@ import express from "express";
 import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
 import "dotenv/config";
-import { ContenTModel, UserModel } from "./db";
+import { ContenTModel, LinkModel, UserModel } from "./db";
 import { JWT_SECRET } from "./config";
 import { userMiddleware } from "./middlewares";
+import { random } from "./utils";
 
 const app = express();
 app.use(express.json());
@@ -62,7 +63,7 @@ app.post("/api/v1/signin", async (req, res) => {
 });
 
 //Create Content Endpoint
-app.post("/api/v1/content", userMiddleware , async (req, res) => {
+app.post("/api/v1/content", userMiddleware, async (req, res) => {
   const { link, type, title } = req.body;
   await ContenTModel.create({
     link,
@@ -78,37 +79,104 @@ app.post("/api/v1/content", userMiddleware , async (req, res) => {
 });
 
 //Get Existing Content Endpoint
-app.get("/api/v1/content", userMiddleware , async (req, res) => {
+app.get("/api/v1/content", userMiddleware, async (req, res) => {
   //@ts-ignore
   const userId = req.userId;
   const content = await ContenTModel.find({
-    userId : userId
-  }).populate("userId" , "username")
+    userId: userId,
+  }).populate("userId", "username");
 
   res.send({
-    content
-  })
+    content,
+  });
 });
 
 //Delete Existing content Endpoint
-app.delete("/api/v1/content", userMiddleware , async (req, res) => {
+app.delete("/api/v1/content", userMiddleware, async (req, res) => {
   const contentId = req.body.contentId;
   await ContenTModel.deleteMany({
-    contentId ,
+    contentId,
     //@ts-ignore
-    userId : req.userId
-  })
+    userId: req.userId,
+  });
 
   res.json({
-    message : "Content Deleted"
-  })
+    message: "Content Deleted",
+  });
 });
 
 // Share Endpint
-app.post("/api/v1/brain/share", (req, res) => {});
+app.post("/api/v1/brain/share", userMiddleware, async (req, res) => {
+  const share = req.body.share;
+  if (share) {
+    const existingLink = await LinkModel.findOne({
+      //@ts-ignore
+      userId: req.userId,
+    });
+    if (existingLink) {
+      res.json({
+        hash: existingLink.hash,
+      });
+      return;
+    }
+
+    const hash = random(10);
+    await LinkModel.create({
+      //@ts-ignore
+      userId: req.userId,
+      hash: hash,
+    });
+
+    res.json({
+      hash,
+    });
+  } else {
+    await LinkModel.deleteOne({
+      // @ts-ignore
+      userId: req.userId,
+    });
+
+    res.json({
+      message: "Remove Link",
+    });
+  }
+});
 
 // Get information with share link Endpoint
-app.get("/api/v1/brain/:shareLink", (req, res) => {});
+app.get("/api/v1/brain/:shareLink", async (req, res) => {
+  const hash = req.params.shareLink;
+
+  const link = await LinkModel.findOne({
+    hash,
+  });
+  if (!link) {
+    res.status(403).send({
+      message: "Incorrect Input",
+    });
+    return;
+  }
+
+  //userid
+  const content = await ContenTModel.find({
+    userId: link.userId,
+  });
+
+  const user = await UserModel.findOne({
+    _id: link.userId,
+  });
+
+  if (!user) {
+    res.status(403).json({
+      message: "error occured , ideally not",
+    });
+    return;
+  }
+
+  res.send({
+    username: user?.username,
+    content: content,
+  });
+});
 
 //Connecting to DB & Server Listen Port - 3000
 async function main() {
