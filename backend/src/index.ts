@@ -6,9 +6,11 @@ import { ContenTModel, LinkModel, UserModel } from "./db";
 import { JWT_SECRET } from "./config";
 import { userMiddleware } from "./middlewares";
 import { random } from "./utils";
+import cors from "cors";
 
 const app = express();
 app.use(express.json());
+app.use(cors())
 
 //Sign Up Endpoint
 app.post("/api/v1/signup", async (req, res) => {
