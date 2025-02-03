@@ -1,7 +1,7 @@
 export function Input({
   refs ,placeholder
 }: {
-  refs : any
+  refs? : any
   placeholder: string;
   
 }) {
