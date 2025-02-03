@@ -9,7 +9,7 @@ const userSchema = new mongoose.Schema({
 export const UserModel = mongoose.model("Users", userSchema);
 
 // Content Schema & Model
-const contentTypes = ["image", "video", "article", "audio"]; // Extend as needed in future
+const contentTypes = ["twitter" , "youtube"]; // Extend as needed in future
 
 const contentSchema = new Schema({
   link: { type: String, required: true },
