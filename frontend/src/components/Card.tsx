@@ -1,4 +1,6 @@
+import { DeleteIcon } from "../icons/DeleteIcon";
 import { ShareIcon } from "../icons/ShareIcon";
+import { ThreeBarIcon } from "../icons/ThreeBarIcon";
 
 interface CardProps {
   title: string;
@@ -13,7 +15,7 @@ export function Card({ title, link, type }: CardProps) {
         <div className="flex justify-between">
           <div className="flex items-center text-md">
             <div className="text-gray-500 pr-2">
-              <ShareIcon />
+              <ThreeBarIcon />
             </div>
             {title}
           </div>
@@ -25,7 +27,7 @@ export function Card({ title, link, type }: CardProps) {
               </a>
             </div>
             <div className="text-gray-500">
-              <ShareIcon />
+              <DeleteIcon />
             </div>
           </div>
         </div>

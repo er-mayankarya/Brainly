@@ -44,37 +44,27 @@ export function CreateContentModal({
         <div className="w-screen h-screen bg-slate-700 fixed top-0 left-0 opacity-80 flex justify-center">
           <div className="flex flex-col justify-center">
             <span className="bg-white opacity-100 p-4 rounded">
+             <div>
+            
               <div className="flex justify-end">
-                <div onClick={onClose} className="cursor-pointer">
+                <div onClick={onClose} className="cursor-pointer ">
                   <CrossIcon />
                 </div>
+              </div>
               </div>
               <div>
                 <Input refs={titleRef} placeholder={"Title"} />
                 <Input refs={linkRef} placeholder={"Link"} />
               </div>
-              <div>
-                <h1> Type </h1>
-                <div className="flex gap-1 p-4">
-                  <Button
-                    text="Youtube"
-                    variant={
-                      type === ContentType.Youtube ? "primary" : "secondary"
-                    }
-                    onClick={() => {
-                      setType(ContentType.Youtube);
-                    }}
-                  ></Button>
-                  <Button
-                    text="Twitter"
-                    variant={
-                      type === ContentType.Twitter ? "primary" : "secondary"
-                    }
-                    onClick={() => {
-                      setType(ContentType.Twitter);
-                    }}
-                  ></Button>
-                </div>
+              <div className="ml-4 pb-4 pt-2">
+                <h1 className="pb-2"> Type : </h1>
+                <input type="radio" name="type" onClick={ () => {
+                  setType(ContentType.Youtube);
+                }} /> Youtube
+                <br></br>
+                <input type="radio" name="type" onClick={ () => {
+                  setType(ContentType.Twitter);
+                }} /> Twitter
               </div>
               <div className="flex justify-center">
                 <Button onClick={addContent} variant="primary" text="Submit" />
