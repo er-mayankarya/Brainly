@@ -11,13 +11,13 @@ interface CardProps {
 export function Card({ title, link, type }: CardProps) {
   return (
     <div>
-      <div className="p-4 bg-white rounded-md border-gray-200 max-w-72 border min-h-48 min-w-72">
+      <div className="p-4 bg-white rounded-md border-slate-200 max-w-72 border min-h-48 min-w-72">
         <div className="flex justify-between">
           <div className="flex items-center text-md">
-            <div className="text-gray-500 pr-2">
+            <div className="text-gray-500 pr-2 cursor-pointer">
               <ThreeBarIcon />
             </div>
-            {title}
+            <b>{title}</b>
           </div>
 
           <div className="flex items-center">
@@ -26,7 +26,7 @@ export function Card({ title, link, type }: CardProps) {
                 <ShareIcon />
               </a>
             </div>
-            <div className="text-gray-500">
+            <div className="text-gray-500 cursor-pointer">
               <DeleteIcon />
             </div>
           </div>
